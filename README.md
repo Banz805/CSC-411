@@ -39,8 +39,10 @@ The Online Bookshop is a simple online bookstore software designed to manage boo
 - **Backend**: Python, Flask
 - **Database**: MySQL
 - **Data Formats**: XML, JSON
+- **API**: this is for the currency conversion (currency conversion API) 
 
 ## Prerequisites
 
 1. **Python 3.7 or higher**
 2. **MySQL Server**
+3. **internet connection** (this is for the API calls)
