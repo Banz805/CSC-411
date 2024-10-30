@@ -1,0 +1,182 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Sphumelel/Sphumelel/blob/main/Client_implementation_code.ipynb\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "pHnvVL1pZN-w",
+        "outputId": "c371414a-3db0-47dc-d90b-58999b92fa7a"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: requests in /usr/local/lib/python3.10/dist-packages (2.32.3)\n",
+            "Requirement already satisfied: charset-normalizer<4,>=2 in /usr/local/lib/python3.10/dist-packages (from requests) (3.4.0)\n",
+            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.10/dist-packages (from requests) (3.10)\n",
+            "Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.10/dist-packages (from requests) (2.2.3)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.10/dist-packages (from requests) (2024.8.30)\n"
+          ]
+        }
+      ],
+      "source": [
+        "pip install requests"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 3,
+      "metadata": {
+        "id": "8dfDQfShZ0Dk"
+      },
+      "outputs": [],
+      "source": [
+        "import requests"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 4,
+      "metadata": {
+        "id": "7FuLC497Z-Ql"
+      },
+      "outputs": [],
+      "source": [
+        "# Base URL of server\n",
+        "BASE_URL = 'http://your-server-address/api/books'\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 5,
+      "metadata": {
+        "id": "Hw42ERMNaIqE"
+      },
+      "outputs": [],
+      "source": [
+        "# Function to display available books\n",
+        "def get_books():\n",
+        "    try:\n",
+        "        response = requests.get(f\"{BASE_URL}/list\")\n",
+        "        if response.status_code == 200:\n",
+        "            books = response.json()  # assuming the server returns a JSON list of books\n",
+        "            print(\"Available Books:\")\n",
+        "            for book in books:\n",
+        "                print(f\"ID: {book['id']}, Title: {book['title']}, Price: {book['price']}\")\n",
+        "        else:\n",
+        "            print(\"Error fetching books from server.\")\n",
+        "    except Exception as e:\n",
+        "        print(f\"An error occurred: {e}\")"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 6,
+      "metadata": {
+        "id": "0aXuVqj-aPdt"
+      },
+      "outputs": [],
+      "source": [
+        "# Function to purchase a book\n",
+        "def purchase_book(book_id):\n",
+        "    try:\n",
+        "        payload = {\"book_id\": book_id}\n",
+        "        response = requests.post(f\"{BASE_URL}/purchase\", json=payload)\n",
+        "        if response.status_code == 200:\n",
+        "            print(\"Purchase successful!\")\n",
+        "        else:\n",
+        "            print(\"Error purchasing the book.\")\n",
+        "    except Exception as e:\n",
+        "        print(f\"An error occurred: {e}\")\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 7,
+      "metadata": {
+        "id": "EveRK_8RaXr_"
+      },
+      "outputs": [],
+      "source": [
+        "# Client-Side Operations\n",
+        "def client_menu():\n",
+        "    while True:\n",
+        "        print(\"\\n--- Online Bookstore Client ---\")\n",
+        "        print(\"1. View available books\")\n",
+        "        print(\"2. Purchase a book\")\n",
+        "        print(\"3. Exit\")\n",
+        "        choice = input(\"Enter your choice: \")\n",
+        "\n",
+        "        if choice == '1':\n",
+        "            get_books()\n",
+        "        elif choice == '2':\n",
+        "            book_id = input(\"Enter the Book ID to purchase: \")\n",
+        "            purchase_book(book_id)\n",
+        "        elif choice == '3':\n",
+        "            print(\"Exiting...\")\n",
+        "            break\n",
+        "        else:\n",
+        "            print(\"Invalid choice. Try again.\")"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Jp5V_8R4aphE",
+        "outputId": "d32987f9-5514-4d50-adb2-807e2648eeca"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\n",
+            "--- Online Bookstore Client ---\n",
+            "1. View available books\n",
+            "2. Purchase a book\n",
+            "3. Exit\n"
+          ]
+        }
+      ],
+      "source": [
+        "# Run the client menu\n",
+        "if __name__ == \"__main__\":\n",
+        "    client_menu()"
+      ]
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMB4kCgjKX8LcvtSj/mGa/p",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
