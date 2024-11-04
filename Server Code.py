@@ -41,13 +41,22 @@ def get_books():
     return jsonify(books)
 
 # Function to convert prices using a currency conversion API
-def convert_currency(amount, from_currency, to_currency):
-    api_key = 'your_api_key'
-    url = f'https://api.exchangerate-api.com/v4/latest/{from_currency}'
-    response = requests.get(url)
-    rates = response.json()['rates']
+def convert_currency(amount, from_currency, to_currency, api_key="c05a5ab01d1de424e8d356f6"):
+
+  url = f"https://api.exchangerate-api.com/v4/latest/{from_currency}"
+
+  # Add the API key as a query parameter
+  headers = {"Authorization": f"Bearer {api_key}"}
+
+  try:
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()  # Raise an exception for non-2xx status codes
+    rates = response.json()["rates"]
     converted_amount = amount * rates[to_currency]
     return converted_amount
+  except requests.exceptions.RequestException as e:
+    print(f"Error fetching conversion rates: {e}")
+    return None
 
 # Endpoint to convert book price from USD to EUR (or other currencies)
 @app.route('/convert-price', methods=['GET'])
