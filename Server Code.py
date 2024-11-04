@@ -54,6 +54,7 @@ def convert_currency(amount, from_currency, to_currency, api_key="c05a5ab01d1de4
     rates = response.json()["rates"]
     converted_amount = amount * rates[to_currency]
     return converted_amount
+  
   except requests.exceptions.RequestException as e:
     print(f"Error fetching conversion rates: {e}")
     return None
@@ -64,9 +65,16 @@ def convert_price():
     try:
         price = float(request.args.get('price'))
         converted_price = convert_currency(price, 'USD', 'EUR')
+
+        if converted_price is None:
+            return jsonify({'error': 'Failed to convert currency'}), 500
+
         return jsonify({'converted_price': converted_price})
+    except ValueError:
+        return jsonify({'error': 'Invalid price format'}), 400
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
